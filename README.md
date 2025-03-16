@@ -88,7 +88,7 @@ response = assistant.process_query("What do we know about Einstein?")
 
 ## Getting Started
 
-1. Install Ollama from [ollama.ai](https://ollama.com)
+1. Install Ollama from [ollama.com](https://ollama.com)
 2. Pull a language model: `ollama pull gemma3:12b`
 3. Initialize an assistant with memory
 4. Add knowledge and start asking questions!
