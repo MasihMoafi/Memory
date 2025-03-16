@@ -2,7 +2,7 @@ import os
 from typing import Dict, List, Any, Optional
 import json
 from datetime import datetime
-import requests  # For Ollama API calls
+import requests 
 
 class Result:
     """Wrapper class to mimic the result object from LangGraph's InMemoryStore"""
