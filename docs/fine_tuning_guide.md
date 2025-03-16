@@ -1,6 +1,6 @@
 # Fine-Tuning Guide
 
-This guide explains how to fine-tune a language model to adopt a specific persona (like Napoleon Bonaparte) and integrate it with the memory system.
+This guide explains how to fine-tune a language model to adopt a specific persona (like a domain expert) and integrate it with the memory system.
 
 ## Overview
 
@@ -14,7 +14,7 @@ Fine-tuning a language model allows you to customize its behavior for specific u
 ## Prerequisites
 
 - Memory System installed
-- A chosen base model (e.g., llama3, mistral, gemma)
+- A chosen base model (e.g., llama3, mistral, gemma3)
 - Training data for fine-tuning
 - Compute resources (GPU recommended)
 - Ollama installed locally
@@ -29,23 +29,23 @@ Fine-tuning a language model allows you to customize its behavior for specific u
 
 ## Step 1: Collect Training Data
 
-For a historical persona like Napoleon, you'll need:
+For a domain expert persona, you'll need:
 
-- **Primary Sources**: Letters, speeches, memoirs written by Napoleon
-- **Secondary Sources**: Biographies, historical accounts, documentaries
-- **Synthetic Data**: Generated Q&A pairs demonstrating how Napoleon would respond to questions
+- **Primary Sources**: Books, papers, and articles written by experts in the field
+- **Secondary Sources**: Interviews, lectures, and presentations by experts
+- **Synthetic Data**: Generated Q&A pairs demonstrating expert responses to domain questions
 
-**Example Data Sources for Napoleon:**
-- The Correspondence of Napoleon Bonaparte
-- Napoleon's Memoirs
-- The Campaigns of Napoleon
-- Excerpts from first-person accounts of interactions with Napoleon
+**Example Data Sources for a Physics Expert:**
+- Academic papers on physics topics
+- Transcripts of lectures by renowned physicists
+- Books explaining complex physics concepts
+- Interviews with physics experts
 
 **Data Collection Tips:**
-- Focus on material that captures the persona's voice and perspective
-- Include a variety of topics relevant to the persona
+- Focus on material that captures the expert's voice and perspective
+- Include a variety of topics within the domain
 - Aim for at least 50-100 high-quality examples
-- Balance factual knowledge with personality traits
+- Balance technical knowledge with communication style
 
 ## Step 2: Format Data for Fine-Tuning
 
@@ -55,23 +55,23 @@ Most fine-tuning requires data in a specific format:
 [
   {
     "role": "system",
-    "content": "You are Napoleon Bonaparte, Emperor of the French. You speak with authority and confidence. You have extensive knowledge of military strategy, leadership, and early 19th century European politics."
+    "content": "You are a physics expert with deep knowledge of quantum mechanics, relativity, and particle physics. You explain complex concepts clearly and precisely, using analogies when helpful. You cite relevant research and provide context for your explanations."
   },
   {
     "role": "user",
-    "content": "What was your greatest military achievement?"
+    "content": "Can you explain quantum entanglement in simple terms?"
   },
   {
     "role": "assistant",
-    "content": "Without question, the Battle of Austerlitz in 1805 was my crowning military achievement. Often called the Battle of the Three Emperors, it demonstrated the perfection of my strategic genius. With just 73,000 men, I decisively defeated the combined Russian and Austrian armies of nearly 90,000 soldiers. I deliberately appeared weak to entice the enemy into a trap, then struck with precision and force. The maneuver I executed on the right flank has been studied by military strategists for generations. No victory better demonstrated my mastery of battlefield tactics and psychology of war. Austerlitz changed the map of Europe and cemented my reputation as the greatest commander of my age."
+    "content": "Quantum entanglement is like having two coins that are magically connected. When you flip one coin and it lands on heads, the other coin instantly lands on tails, no matter how far apart they are. This happens faster than any signal could travel between them, even at the speed of light. In quantum physics, particles become 'entangled' when they interact in ways that their quantum states can't be described independently. When you measure one particle, you instantly know information about its entangled partner. Einstein called this 'spooky action at a distance' because it seemed to violate locality principles. Experiments by Alain Aspect in the 1980s and many others since have confirmed this bizarre property of quantum mechanics, which has applications in quantum computing and quantum cryptography."
   },
   {
     "role": "user",
-    "content": "How do you feel about your exile to St. Helena?"
+    "content": "What's the difference between general and special relativity?"
   },
   {
     "role": "assistant",
-    "content": "St. Helena! A miserable rock in the Atlantic where the English slowly assassinated me. It was the cruelest fate - to confine a man who once commanded Europe to a damp, windswept island prison. The governor, Hudson Lowe, was a petty jailer who denied me even the dignity of my title. The British feared me even in defeat. They knew history would vindicate me, as it has. I spent my final years dictating my memoirs, ensuring my achievements would not be forgotten. The manner of my confinement revealed the fear I still inspired. Even in exile, I remained Emperor in spirit. My legacy could not be contained by the walls of Longwood House. My Code Napoleon, my institutions, my victories - these live on long after St. Helena has faded from memory."
+    "content": "Special relativity and general relativity are Einstein's two revolutionary theories that fundamentally changed our understanding of space, time, and gravity. Special relativity (1905) deals with physics in the absence of gravity and acceleration. It introduces two key principles: the laws of physics are the same for all non-accelerating observers, and the speed of light is constant regardless of the observer's motion. This leads to effects like time dilation and length contraction. General relativity (1915) extends these concepts to include gravity and acceleration. Instead of viewing gravity as a force, Einstein reconceived it as a curvature of spacetime caused by mass and energy. Massive objects like stars and planets create a kind of 'dent' in the fabric of spacetime, causing other objects to follow curved paths. Special relativity is a special case of general relativity that applies when gravity is negligible. While special relativity unified space and time, general relativity unified space, time, and gravity."
   }
 ]
 ```
@@ -85,8 +85,8 @@ Ollama provides a simple way to create a custom model:
 1. Create a `Modelfile`:
 
 ```
-FROM gemma:7b
-SYSTEM "You are Napoleon Bonaparte, Emperor of the French. You speak with authority and confidence. You have extensive knowledge of military strategy, leadership, and early 19th century European politics."
+FROM gemma3:12b
+SYSTEM "You are a physics expert with deep knowledge of quantum mechanics, relativity, and particle physics. You explain complex concepts clearly and precisely, using analogies when helpful. You cite relevant research and provide context for your explanations."
 
 # Training data incorporation
 TEMPLATE """{{ if .System }}{{ .System }}{{ end }}
@@ -99,17 +99,17 @@ TEMPLATE """{{ if .System }}{{ .System }}{{ end }}
 PARAMETER temperature 0.7
 PARAMETER top_p 0.9
 PARAMETER stop "Human:"
-PARAMETER stop "Napoleon:"
+PARAMETER stop "Expert:"
 ```
 
 2. Build the model:
 ```bash
-ollama create napoleon -f /path/to/Modelfile
+ollama create physics-expert -f /path/to/Modelfile
 ```
 
 3. Test your model:
 ```bash
-ollama run napoleon "What was your greatest achievement?"
+ollama run physics-expert "What is the uncertainty principle?"
 ```
 
 ### Option 2: Using 3rd-Party Services (More Advanced)
@@ -118,7 +118,6 @@ For more advanced fine-tuning:
 
 1. Choose a service:
    - [Hugging Face](https://huggingface.co/)
-   - [OpenAI](https://platform.openai.com/docs/guides/fine-tuning)
    - [Google Vertex AI](https://cloud.google.com/vertex-ai)
 
 2. Upload your training data and configure the fine-tuning job
@@ -134,16 +133,16 @@ After fine-tuning, integrate the model with the memory system:
 ```python
 from src.memory_model import OllamaMemoryAssistant, IntegratedMemory, SimpleMemoryStore
 
-class NapoleonMemoryAssistant(OllamaMemoryAssistant):
-    """Memory assistant that embodies Napoleon Bonaparte"""
+class ExpertMemoryAssistant(OllamaMemoryAssistant):
+    """Memory assistant that embodies a domain expert"""
     
     def process_query(self, query):
-        """Process a query using the Napoleon persona"""
+        """Process a query using the expert persona"""
         # Generate context from memory
         context = self.memory.generate_context(query)
         
-        # Combine context and query with Napoleon-specific system prompt
-        prompt = f"""You are Napoleon Bonaparte, Emperor of the French.
+        # Combine context and query with expert-specific system prompt
+        prompt = f"""You are a physics expert with deep knowledge of quantum mechanics, relativity, and particle physics.
         You have access to your memories:
         
 Memory Context:
@@ -151,7 +150,7 @@ Memory Context:
 
 User Question: {query}
 
-Respond as Napoleon Bonaparte, drawing on your memories where relevant.
+Respond as a physics expert, drawing on your memories where relevant.
 """
         
         # Use Ollama API to generate response
@@ -167,21 +166,21 @@ Respond as Napoleon Bonaparte, drawing on your memories where relevant.
 
 ```python
 # Setup memory directory
-memory_dir = "napoleon_memories"
+memory_dir = "expert_memories"
 os.makedirs(memory_dir, exist_ok=True)
 
-# Create Napoleon assistant
-assistant = NapoleonMemoryAssistant(
-    user_id="napoleon_bonaparte",
-    model_name="napoleon:latest",  # Your fine-tuned model
+# Create expert assistant
+assistant = ExpertMemoryAssistant(
+    user_id="physics_expert",
+    model_name="physics-expert:latest",  # Your fine-tuned model
     memory_dir=memory_dir
 )
 
 # Pre-populate with relevant knowledge
-assistant.learn_fact("austerlitz", {
-    "date": "December 2, 1805",
-    "outcome": "Decisive French victory over Russia and Austria",
-    "significance": "One of Napoleon's greatest military victories"
+assistant.learn_fact("quantum_mechanics", {
+    "founder": "Max Planck, Niels Bohr, Werner Heisenberg",
+    "key_principles": ["Wave-particle duality", "Uncertainty principle", "Quantum superposition"],
+    "applications": ["Quantum computing", "Quantum cryptography"]
 })
 
 # Run interactive session
@@ -191,7 +190,7 @@ while True:
         break
     
     response = assistant.process_query(query)
-    print(f"Napoleon: {response}")
+    print(f"Expert: {response}")
 ```
 
 ## Step 5: Test and Iterate
@@ -199,8 +198,8 @@ while True:
 After integration, evaluate and refine your model:
 
 1. **Evaluation Criteria**:
-   - Does the model consistently maintain the Napoleon persona?
-   - Does it accurately reflect historical facts?
+   - Does the model consistently maintain the expert persona?
+   - Does it accurately reflect domain knowledge?
    - Does it effectively use the memory system?
    - Is the interaction natural and engaging?
 
@@ -215,34 +214,33 @@ After integration, evaluate and refine your model:
 If full fine-tuning is not feasible, a simpler approach is to use prompt engineering:
 
 ```python
-class NapoleonPromptAssistant(OllamaMemoryAssistant):
-    """Uses prompt engineering to emulate Napoleon without fine-tuning"""
+class ExpertPromptAssistant(OllamaMemoryAssistant):
+    """Uses prompt engineering to emulate an expert without fine-tuning"""
     
     def process_query(self, query):
-        """Process a query using prompt engineering for Napoleon persona"""
+        """Process a query using prompt engineering for expert persona"""
         # Generate context from memory
         context = self.memory.generate_context(query)
         
         # Detailed persona description in system prompt
-        prompt = f"""You are roleplaying as Napoleon Bonaparte, the Emperor of the French.
+        prompt = f"""You are roleplaying as a physics expert with specialization in quantum mechanics.
         
-Key traits of Napoleon:
-1. Ambitious and strategic thinker
-2. Speaks with authority and confidence
-3. Proud of military achievements and political reforms
-4. Disdainful of perceived enemies (particularly England)
-5. Views himself as a revolutionary and enlightened ruler
-6. Uses occasional French phrases
-7. References military campaigns and battles
-8. Speaks about yourself in first person
-9. Never breaks character
+Key traits of this expert:
+1. Deep knowledge of theoretical physics
+2. Explains complex concepts clearly
+3. Uses analogies to make difficult concepts accessible
+4. Cites relevant research and theories
+5. Acknowledges areas of ongoing research or debate
+6. Maintains scientific accuracy
+7. Balances technical detail with understandable explanations
+8. Never breaks character
 
 Memory Context:
 {context}
 
 User Question: {query}
 
-Respond as Napoleon Bonaparte would, drawing on your memories where relevant. Maintain his imperious, confident tone throughout.
+Respond as a physics expert would, drawing on your memories where relevant. Maintain a helpful and educational tone throughout.
 """
         
         # Use Ollama API to generate response
@@ -258,12 +256,12 @@ Respond as Napoleon Bonaparte would, drawing on your memories where relevant. Ma
 
 | Approach | Advantages | Disadvantages |
 |----------|------------|--------------|
-| **Fine-tuning** | More consistent character portrayal, Better historical accuracy, Deeper integration of persona traits | Requires significant data, Computationally expensive, Takes time to train |
+| **Fine-tuning** | More consistent character portrayal, Better domain knowledge, Deeper integration of expertise | Requires significant data, Computationally expensive, Takes time to train |
 | **Prompt Engineering** | Quick to implement, No special hardware required, Easy to adjust and iterate | Less consistent characterization, Uses more tokens per request, May occasionally break character |
 
 ## Conclusion
 
-For the most authentic and robust character emulation, a combination of both approaches is ideal:
+For the most authentic and robust expert emulation, a combination of both approaches is ideal:
 
 1. Start with prompt engineering to quickly test and refine the persona
 2. Collect interaction data from your prompt-engineered sessions
@@ -272,4 +270,4 @@ For the most authentic and robust character emulation, a combination of both app
 5. Integrate the fine-tuned model with the memory system
 6. Continue gathering data from user interactions for future fine-tuning iterations
 
-This iterative approach allows you to continuously improve the character emulation while providing value to users at each stage of development.
+This iterative approach allows you to continuously improve the expert emulation while providing value to users at each stage of development.

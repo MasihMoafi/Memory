@@ -7,7 +7,7 @@ Memory-empowered LLMs with a cognitive memory system for AI assistants, using Ol
 This system implements three types of memory inspired by human cognition:
 
 1. **Semantic Memory**: Stores factual knowledge (e.g., information about historical figures, concepts, facts)
-   - Example: "Napoleon was born in 1769", "Einstein developed the theory of relativity"
+   - Example: "Einstein developed the theory of relativity", "The Earth orbits the Sun"
    - Implementation: Key-value store with concept identifiers and associated facts
 
 2. **Episodic Memory**: Stores experiences and events (e.g., past conversations, interactions)
@@ -15,7 +15,7 @@ This system implements three types of memory inspired by human cognition:
    - Implementation: Timestamped interaction records with content and metadata
 
 3. **Procedural Memory**: Stores information about how to perform tasks (e.g., analysis methods, procedures)
-   - Example: "Steps to analyze a historical figure", "Scientific method procedure"
+   - Example: "Steps to analyze a scientific theory", "Scientific method procedure"
    - Implementation: Named procedures with structured step-by-step instructions
 
 ## Architecture
@@ -48,36 +48,37 @@ This implementation supports persistent memory across sessions via JSON file sto
 ```python
 # Create an assistant with persistent memory
 assistant = OllamaMemoryAssistant(
-    user_id="history_researcher",
+    user_id="research_assistant",
     model_name="gemma3:12b",
     memory_dir="./memories"
 )
 
 # Add factual knowledge (semantic memory)
-assistant.learn_fact("napoleon_bonaparte", {
-    "birth": "1769, Corsica",
-    "death": "1821, Saint Helena",
-    "achievements": ["Napoleonic Code", "Military conquests"]
+assistant.learn_fact("albert_einstein", {
+    "birth": "1879, Ulm, Germany",
+    "death": "1955, Princeton, USA",
+    "contributions": ["Theory of Relativity", "Photoelectric effect", "Brownian motion"]
 })
 
 # Add procedural knowledge
-assistant.learn_procedure("analyze_historical_figure", {
+assistant.learn_procedure("analyze_scientific_theory", {
     "steps": [
-        "1. Research early life and background",
-        "2. Examine key achievements and contributions",
-        "3. Analyze leadership style and decision-making"
+        "1. Identify the core principles",
+        "2. Examine the empirical evidence",
+        "3. Consider predictive power and falsifiability",
+        "4. Evaluate practical applications"
     ]
 })
 
 # Query the system
-response = assistant.process_query("What do we know about Napoleon?")
+response = assistant.process_query("What do we know about Einstein?")
 ```
 
 ## Advanced Features
 
 - **Historical Figures Demo**: Specialized demo showing memory usage with historical figures
 - **Persistent Memory**: Save and load memories across different sessions
-- **Napoleon Persona**: Example adaptation using prompt engineering to create a character with memory
+- **Character Adaptation**: Example adaptation using prompt engineering to create personas with memory
 
 ## Requirements
 

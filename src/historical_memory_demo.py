@@ -15,15 +15,15 @@ def run_historical_memory_demo():
     # SEMANTIC MEMORY (facts about historical figures)
     print("Adding semantic memories (facts)...")
     
-    assistant.learn_fact("napoleon_bonaparte", {
-        "birth": "1769, Corsica",
-        "death": "1821, Saint Helena",
-        "title": "Emperor of France",
-        "achievements": ["Napoleonic Code", "Military conquests in Europe", "Civil administration reforms"],
-        "notable_battles": ["Austerlitz", "Waterloo", "Battle of the Pyramids"],
-        "quotes": ["Never interrupt your enemy when he is making a mistake.", 
-                  "History is a set of lies agreed upon."],
-        "leadership_style": "Authoritarian yet meritocratic, focused on efficiency and legal reform"
+    assistant.learn_fact("albert_einstein", {
+        "birth": "1879, Ulm, Germany",
+        "death": "1955, Princeton, USA",
+        "title": "Theoretical Physicist",
+        "achievements": ["Theory of Relativity", "Photoelectric effect", "Mass-energy equivalence (E=mc²)"],
+        "notable_works": ["Special Relativity", "General Relativity", "Quantum Theory contributions"],
+        "quotes": ["Imagination is more important than knowledge.", 
+                  "The important thing is not to stop questioning."],
+        "scientific_approach": "Thought experiments, visual thinking, and mathematical formalism"
     })
     
     assistant.learn_fact("elon_musk", {
@@ -44,18 +44,18 @@ def run_historical_memory_demo():
             "1. Research their early life and background",
             "2. Examine key achievements and contributions",
             "3. Understand historical context they operated in",
-            "4. Analyze their leadership style and decision-making",
+            "4. Analyze their approach to problem-solving",
             "5. Evaluate their legacy and impact on future generations"
         ]
     })
     
-    assistant.learn_procedure("compare_leadership_styles", {
+    assistant.learn_procedure("compare_scientific_contributions", {
         "steps": [
             "1. Identify the key figures to compare",
-            "2. Research their background and rise to power",
-            "3. Analyze decision-making patterns and key policies",
-            "4. Evaluate communication styles and relationships with followers",
-            "5. Compare how they handled crises or opposition",
+            "2. Research their educational background and influences",
+            "3. Analyze their major discoveries and methodologies",
+            "4. Evaluate their impact on scientific understanding",
+            "5. Compare how they communicated their ideas",
             "6. Assess their historical impact and legacy"
         ]
     })
@@ -64,28 +64,28 @@ def run_historical_memory_demo():
     print("Adding episodic memories (past experiences)...")
     
     assistant.remember_interaction("research-session-2023-10-15", {
-        "topic": "Comparing leadership styles",
-        "figures_examined": ["Napoleon Bonaparte", "Elon Musk"],
-        "insights": "Both leaders leveraged cutting-edge technology of their era to expand influence",
+        "topic": "Comparing innovative thinkers",
+        "figures_examined": ["Albert Einstein", "Elon Musk"],
+        "insights": "Both figures challenged conventional thinking and used first principles reasoning",
         "questions_raised": [
-            "How might Napoleon have used modern technology?", 
-            "What similarities exist between Napoleon's military strategy and Musk's business approach?"
+            "How might Einstein have approached today's technological challenges?", 
+            "What similarities exist between Einstein's theoretical approach and Musk's engineering approach?"
         ]
     })
     
     # Demonstrate with queries that engage different memory types
     demo_queries = [
         # Semantic memory query (factual)
-        "When was Napoleon born and what were his major achievements?",
+        "When was Einstein born and what were his major achievements?",
         
         # Procedural memory query (how-to)
         "How should I analyze Elon Musk as a historical figure?",
         
         # Episodic memory query (past experiences)
-        "What did we discuss in our last research session about leadership styles?",
+        "What did we discuss in our last research session about innovative thinkers?",
         
         # Mixed memory query (uses multiple memory types)
-        "Compare Napoleon and Elon Musk's leadership styles based on our previous discussions and what we know about them."
+        "Compare Einstein and Elon Musk's approaches to innovation based on our previous discussions and what we know about them."
     ]
     
     # Run the demo queries

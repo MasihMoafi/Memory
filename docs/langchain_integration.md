@@ -6,7 +6,7 @@ This guide explains how to integrate the Memory System with LangChain, allowing 
 
 - Memory System installed
 - LangChain installed: `pip install langchain`
-- LangChain integration model (e.g., `pip install langchain-openai`)
+- LangChain integration model (e.g., `pip install langchain-community`)
 
 ## Integration Approach
 
@@ -20,7 +20,7 @@ There are two main ways to integrate LangChain with our memory system:
 You can adapt the `OllamaMemoryAssistant` to work with LangChain models:
 
 ```python
-from langchain.llms import OpenAI
+from langchain_community.llms import HuggingFaceHub
 from langchain_core.language_models import BaseLLM
 from src.memory_model import IntegratedMemory, SimpleMemoryStore
 
@@ -73,33 +73,34 @@ Please respond to the user's question using the provided memory context where re
 ### Example Usage:
 
 ```python
-from langchain.llms import OpenAI
 from langchain_community.llms import HuggingFaceHub
-from langchain_openai import ChatOpenAI
 
-# Using OpenAI
-openai_assistant = LangChainMemoryAssistant(
-    user_id="openai_user",
-    llm=ChatOpenAI(model="gpt-3.5-turbo")
+# Using Hugging Face with Gemma3
+gemma_assistant = LangChainMemoryAssistant(
+    user_id="gemma_user",
+    llm=HuggingFaceHub(
+        repo_id="google/gemma3-12b", 
+        model_kwargs={"temperature": 0.7, "max_length": 2048}
+    )
 )
 
-# Using Hugging Face
-hf_assistant = LangChainMemoryAssistant(
-    user_id="huggingface_user",
+# Using other models
+llama_assistant = LangChainMemoryAssistant(
+    user_id="llama_user",
     llm=HuggingFaceHub(
-        repo_id="google/flan-t5-xxl", 
+        repo_id="meta-llama/Meta-Llama-3-8B", 
         model_kwargs={"temperature": 0.7}
     )
 )
 
 # Add knowledge
-openai_assistant.learn_fact("albert_einstein", {
+gemma_assistant.learn_fact("albert_einstein", {
     "birth": "1879",
     "theories": ["General Relativity", "Special Relativity"]
 })
 
 # Process queries
-response = openai_assistant.process_query("What do we know about Einstein?")
+response = gemma_assistant.process_query("What do we know about Einstein?")
 print(response)
 ```
 
@@ -148,7 +149,7 @@ class IntegratedLangChainMemory(BaseMemory):
 ### Example Usage with LangChain Chain:
 
 ```python
-from langchain.llms import OpenAI
+from langchain_community.llms import HuggingFaceHub
 from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
 
@@ -170,9 +171,12 @@ prompt = PromptTemplate(
     template=template
 )
 
-# Create conversation chain
+# Create conversation chain with Gemma model
 chain = ConversationChain(
-    llm=OpenAI(temperature=0),
+    llm=HuggingFaceHub(
+        repo_id="google/gemma3-12b",
+        model_kwargs={"temperature": 0.7, "max_length": 2048}
+    ),
     memory=memory,
     prompt=prompt,
     verbose=True
@@ -194,7 +198,7 @@ print(response)
 1. **API Differences**: LangChain models have different APIs than Ollama, requiring adaptation
 2. **Prompt Engineering**: Different models may require different prompt templates
 3. **Token Limits**: Be aware of token limits when providing memory context to models
-4. **Cost**: LangChain with hosted models like OpenAI will incur API costs
+4. **Model Availability**: Ensure you have access to the models you want to use
 5. **Persistence**: Ensure paths are set correctly for persistent memory storage
 
 ## Extended Use Cases

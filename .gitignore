@@ -6,4 +6,5 @@ __pycache__/
 # Memory directories
 memories/
 persistent_memories/
-napoleon_memories/
+
+expert_memories/
