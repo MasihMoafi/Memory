@@ -1,0 +1,9 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.class
+
+# Memory directories
+memories/
+persistent_memories/
+napoleon_memories/
