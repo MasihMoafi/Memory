@@ -96,4 +96,3 @@ response = assistant.process_query("What do we know about Einstein?")
 ## Project Structure
 
 - `src/memory_model.py` - Core memory system implementation
-- `src/memory_demo.py` - Demonstration of queries using all memory types
