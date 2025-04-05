@@ -17,6 +17,6 @@
 
 **The memory model that I've produced**
 
-![my memory](https://github.com/user-attachments/assets/1c09b509-dea0-41f6-8c75-ba29e3b3fb53
+![my memory](https://github.com/user-attachments/assets/1c09b509-dea0-41f6-8c75-ba29e3b3fb53)
 
 **The retrieval works by accessing relevant vectors; thereby physicial memory usage is very limited.
