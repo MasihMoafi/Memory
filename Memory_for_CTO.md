@@ -11,6 +11,8 @@
 
 **How does this help our retrieval?**
 
+![Neural Net](https://github.com/user-attachments/assets/254ec6fc-c94d-479b-9330-1f961a046862)
+
 ![Memories (2)](https://github.com/user-attachments/assets/c7704ceb-898b-464a-a226-3b11649899cc)
 
 **The memory model that I've produced**
