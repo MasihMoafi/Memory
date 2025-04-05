@@ -1,5 +1,7 @@
 **How Your Brain Stores Memories?**
 
+![brain memory](https://github.com/user-attachments/assets/0bd8de31-5cc8-4440-bf43-d5cde8c70196)
+
 ![how brain stores memories](https://github.com/user-attachments/assets/4eafe237-f806-4c59-a3f8-cb34c8c41d94)
 
 **Types of Memory**
@@ -13,4 +15,6 @@
 
 **The memory model that I've produced**
 
-![my memory](https://github.com/user-attachments/assets/1c09b509-dea0-41f6-8c75-ba29e3b3fb53)
+![my memory](https://github.com/user-attachments/assets/1c09b509-dea0-41f6-8c75-ba29e3b3fb53
+
+**The retrieval works by accessing relevant vectors; thereby physicial memory usage is very limited.
