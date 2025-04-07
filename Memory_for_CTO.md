@@ -36,4 +36,4 @@
 
 
 
-**The retrieval works by accessing relevant vectors; thereby physicial memory usage is very limited.**
+**The retrieval works by accessing relevant vectors; thereby physicial memory usage is very efficient.**
