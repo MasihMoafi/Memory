@@ -1,55 +1,49 @@
-# --- Dependencies ---
-# pip install langchain langchain-core langchain-ollama faiss-cpu sentence-transformers
-# (Updated langchain-ollama, removed langchain_community)
+# --- Dependencies --- 
+# pip install langchain langchain-core langchain-ollama faiss-cpu sentence-transformers 
 
-import datetime
-import os # Needed for checking file existence
-# ** Updated Imports **
-from langchain_ollama import ChatOllama, OllamaEmbeddings
-from langchain.memory import ConversationBufferMemory # Added for intra-session memory
-# ** End Updated Imports **
-from langchain_community.vectorstores import FAISS
-# Removed unused memory import: from langchain.memory import VectorStoreRetrieverMemory # We use retriever directly
-from langchain.prompts import PromptTemplate
-from langchain_core.runnables import RunnablePassthrough, RunnableLambda, RunnableParallel
-from langchain_core.output_parsers import StrOutputParser
-from langchain.schema import Document # Needed for manual saving
+import datetime 
+import os 
+from langchain_ollama import ChatOllama, OllamaEmbeddings 
+from langchain.memory import ConversationBufferMemory 
+from langchain_community.vectorstores import FAISS 
+from langchain.prompts import PromptTemplate 
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda, RunnableParallel 
+from langchain_core.output_parsers import StrOutputParser 
+from langchain.schema import Document 
 
 # --- Config ---
-FAISS_INDEX_PATH = "my_chatbot_memory_index" # Directory to save/load FAISS index
-
+FAISS_INDEX_PATH = "my_chatbot_memory_index" # Directory to save/load FAISS index 
 # --- Ollama LLM & Embeddings Setup ---
-# *** Make sure Ollama is running and you have pulled the models ***
-# Run in terminal: ollama pull gemma3
-# Run in terminal: ollama pull nomic-embed-text
-OLLAMA_LLM_MODEL = 'gemma3' # Using Gemma 3 as requested
-OLLAMA_EMBED_MODEL = 'nomic-embed-text' # Recommended embedding model for Ollama
+# Run in terminal: ollama pull gemma3 
+# Run in terminal: ollama pull nomic-embed-text 
+OLLAMA_LLM_MODEL = 'gemma3' 
+OLLAMA_EMBED_MODEL = 'nomic-embed-text' # Recommended embedding model for Ollama 
 
-try:
-    llm = ChatOllama(model=OLLAMA_LLM_MODEL)
-    embeddings = OllamaEmbeddings(model=OLLAMA_EMBED_MODEL)
-    print(f"Successfully initialized Ollama: LLM='{OLLAMA_LLM_MODEL}', Embeddings='{OLLAMA_EMBED_MODEL}'")
-    # Optional tests removed for brevity
-except Exception as e:
-    print(f"Error initializing Ollama components: {e}")
-    print(f"Ensure Ollama is running & models pulled (e.g., 'ollama pull {OLLAMA_LLM_MODEL}' and 'ollama pull {OLLAMA_EMBED_MODEL}').")
-    exit()
+try: 
+    llm = ChatOllama(model=OLLAMA_LLM_MODEL) 
+    embeddings = OllamaEmbeddings(model=OLLAMA_EMBED_MODEL) 
+    print(f"Successfully initialized Ollama: LLM='{OLLAMA_LLM_MODEL}', Embeddings='{OLLAMA_EMBED_MODEL}'") 
+    # Optional tests removed for brevity 
+except Exception as e: 
+    print(f"Error initializing Ollama components: {e}") 
+    print(f"Ensure Ollama is running & models pulled (e.g., 'ollama pull {OLLAMA_LLM_MODEL}' and 'ollama pull {OLLAMA_EMBED_MODEL}').") 
+    exit() 
 
-# --- Vector Store (Episodic Memory) Setup --- Persisted!
-try:
-    if os.path.exists(FAISS_INDEX_PATH):
-        print(f"Loading existing FAISS index from: {FAISS_INDEX_PATH}")
-        vectorstore = FAISS.load_local(
-            FAISS_INDEX_PATH,
-            embeddings,
-            allow_dangerous_deserialization=True # Required for FAISS loading
-        )
-        retriever = vectorstore.as_retriever(search_kwargs=dict(k=3))
-        print("FAISS vector store loaded successfully.")
+# --- Vector Store (Episodic Memory) Setup --- Persisted! 
+try: 
+    if os.path.exists(FAISS_INDEX_PATH): 
+        print(f"Loading existing FAISS index from: {FAISS_INDEX_PATH}") 
+        vectorstore = FAISS.load_local( 
+            FAISS_INDEX_PATH, 
+            embeddings, 
+            allow_dangerous_deserialization=True # Required for FAISS loading 
+        ) 
+        retriever = vectorstore.as_retriever(search_kwargs=dict(k=3)) 
+        print("FAISS vector store loaded successfully.") 
     else:
-        print(f"No FAISS index found at {FAISS_INDEX_PATH}. Initializing new store.")
-        # FAISS needs at least one text to initialize.
-        vectorstore = FAISS.from_texts(
+        print(f"No FAISS index found at {FAISS_INDEX_PATH}. Initializing new store.") 
+        # FAISS needs at least one text to initialize. 
+        vectorstore = FAISS.from_texts( 
             ["Initial conversation context placeholder - Bot created"],
             embeddings
         )
